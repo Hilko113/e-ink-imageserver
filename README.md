@@ -15,8 +15,8 @@ nano app.py
 cd /etc/apache2/sites-available
 sudo nano /etc/apache2/sites-available/imageserver.conf
 
---Paste the text below:-------------------------------------------------
-
+Paste the text below:
+```
 <VirtualHost 192.168.2.100:80>
     ServerName 192.168.2.100
 
@@ -39,8 +39,7 @@ sudo nano /etc/apache2/sites-available/imageserver.conf
     ErrorLog ${APACHE_LOG_DIR}/imageserver_error.log
     CustomLog ${APACHE_LOG_DIR}/imageserver_access.log combined
 </VirtualHost>
-
-------------------------------------------------------------------------
+```
 
 cd /home/dietpi/imageserver
 sudo nano /home/dietpi/imageserver/imageserver.wsgi
