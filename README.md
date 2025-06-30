@@ -63,11 +63,11 @@ sys.path.insert(0, "/home/dietpi/imageserver")
 from app import app as application
 ```
 
+```
 sudo a2ensite imageserver
 sudo systemctl restart apache2
 sudo chown -R www-data:www-data /home/dietpi/imageserver
 sudo chmod -R 755 /home/dietpi/imageserver
-```
 sudo pip3 install SQLAlchemy
 sudo pip3 install Flask-SQLAlchemy
 sudo pip install pillow
