@@ -55,14 +55,13 @@ Paste the text below:
 cd /home/dietpi/imageserver
 sudo nano /home/dietpi/imageserver/imageserver.wsgi
 
---Paste the text below:-------------------------------------------------
-
+Paste the text below:
+```
 import sys
 sys.path.insert(0, "/home/dietpi/imageserver")
 
 from app import app as application
-
-------------------------------------------------------------------------
+```
 
 sudo a2ensite imageserver
 sudo systemctl restart apache2
@@ -82,5 +81,5 @@ sudo mount.cifs //192.168.2.62/backup/pictures /home/dietpi/imageserver/shared_i
 
 --Add mounting to startup------------------------------------------
 sudo nano /etc/fstab
-//192.168.2.62/backup/pictures /home/dietpi/imageserver/shared_images cifs username=YOURUSERNAME,password=YOURPASSWORD,iocharset=utf8,vers=3.0 0 0
+//192.168.1.1/pictures /home/dietpi/imageserver/shared_images cifs username=YOURUSERNAME,password=YOURPASSWORD,iocharset=utf8,vers=3.0 0 0
 
