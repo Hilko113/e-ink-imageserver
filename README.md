@@ -5,16 +5,27 @@ E-ink ImageServer
 Install DietPi
 In DietPi Menu install Python and Apache.
 
+```
 sudo apt install libapache2-mod-wsgi-py3
+```
+```
 sudo pip3 install Flask
-
+```
+```
 mkdir imageserver
+```
+```
 cd imageserver
+```
+```
 nano app.py
-
+```
+```
 cd /etc/apache2/sites-available
+```
+```
 sudo nano /etc/apache2/sites-available/imageserver.conf
-
+```
 Paste the text below:
 ```
 <VirtualHost 192.168.2.100:80>
