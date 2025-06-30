@@ -3,6 +3,7 @@ E-ink ImageServer
 
 
 Install DietPi
+
 In DietPi Menu install Python and Apache.
 
 ```
@@ -41,10 +42,12 @@ Paste the text below:
     CustomLog ${APACHE_LOG_DIR}/imageserver_access.log combined
 </VirtualHost>
 ```
-
+```
 cd /home/dietpi/imageserver
+```
+```
 sudo nano /home/dietpi/imageserver/imageserver.wsgi
-
+```
 Paste the text below:
 ```
 import sys
@@ -64,12 +67,14 @@ sudo pip install pillow
 ```
 
 
---How to mount a network share------------------------------------------
+How to mount a network share:
+```
 sudo apt install cifs-utils
 sudo mkdir /home/dietpi/imageserver/shared_images
 sudo mount.cifs //192.168.2.62/backup/pictures /home/dietpi/imageserver/shared_images -o username=YOURUSERNAME,password=YOURPASSWORD
-
---Add mounting to startup------------------------------------------
+```
+Add mounting to startup:
+```
 sudo nano /etc/fstab
 //192.168.1.1/pictures /home/dietpi/imageserver/shared_images cifs username=YOURUSERNAME,password=YOURPASSWORD,iocharset=utf8,vers=3.0 0 0
-
+```
