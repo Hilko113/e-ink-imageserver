@@ -71,7 +71,7 @@ How to mount a network share:
 ```
 sudo apt install cifs-utils
 sudo mkdir /home/dietpi/imageserver/shared_images
-sudo mount.cifs //192.168.2.62/backup/pictures /home/dietpi/imageserver/shared_images -o username=YOURUSERNAME,password=YOURPASSWORD
+sudo mount.cifs //192.168.2.1/backup/pictures /home/dietpi/imageserver/shared_images -o username=YOURUSERNAME,password=YOURPASSWORD
 ```
 Add mounting to startup:
 ```
