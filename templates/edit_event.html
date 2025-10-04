@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event</title>
+</head>
+<body>
+    <h1>Edit Event</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" onsubmit="return processEventTimes()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ event.name }}" required>
+        <br><br>
+        <label for="start_day_month">Start Date (MM-DD):</label>
+        <select id="start_month" name="start_month" required>
+            <option value="">Month</option>
+            {% for month in range(1, 13) %}
+                <option value="{{ "%02d" % month }}" {% if event.start_day_month.split('-')[0] == "%02d" % month %}selected{% endif %}>{{ month }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="start_day" name="start_day" required>
+            <option value="">Day</option>
+            {% for day in range(1, 32) %}
+                <option value="{{ "%02d" % day }}" {% if event.start_day_month.split('-')[1] == "%02d" % day %}selected{% endif %}>{{ day }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="end_day_month">End Date (MM-DD):</label>
+        <select id="end_month" name="end_month">
+            <option value="">Month</option>
+            {% for month in range(1, 13) %}
+                <option value="{{ "%02d" % month }}" {% if event.end_day_month and event.end_day_month.split('-')[0] == "%02d" % month %}selected{% endif %}>{{ month }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="end_day" name="end_day">
+            <option value="">Day</option>
+            {% for day in range(1, 32) %}
+                <option value="{{ "%02d" % day }}" {% if event.end_day_month and event.end_day_month.split('-')[1] == "%02d" % day %}selected{% endif %}>{{ day }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Event Times (Select Hours):</label><br>
+        <div id="eventTimesContainer">
+            {% for hour in range(0, 24) %}
+                <label>
+                    <input type="checkbox" name="event_time" value="{{ hour }}" {% if hour|string in existing_event_times %}checked{% endif %}> {{ hour }}
+                </label>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="event_times" name="event_times">
+        <br><br>
+
+        <label>Category:</label>
+        <select id="category_id" name="category_id" required>
+            <option value="">Select a Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == event.category_id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+	<label for="frames">Select Frames:</label><br>
+	{% for frame in frames %}
+    	<label>
+        <input type="checkbox" name="frames" value="{{ frame.id }}" {% if frame.id in selected_frame_ids %}checked{% endif %}>
+        {{ frame.name }}
+    	</label><br>
+	{% endfor %}
+	<br><br>
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('events') }}">Back to Events</a>
+
+    <script>
+        function processEventTimes() {
+            const selectedHours = Array.from(document.querySelectorAll('input[name="event_time"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedHours.length < 1) {
+                alert("Please select at least one hour for event times.");
+                return false;
+            } else if (selectedHours.length > 10) {
+                alert("You can select a maximum of 10 different hours for event times.");
+                return false;
+            }
+
+            document.getElementById('event_times').value = selectedHours.join(',');
+            return true;
+        }
+    </script>
+</body>
+</html>

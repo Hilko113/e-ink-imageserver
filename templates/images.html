@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Images</title>
+</head>
+<body>
+    <h1>Images by Folder</h1>
+
+    <!-- Refresh Button -->
+    <form action="{{ url_for('refresh_images') }}" method="get">
+        <button type="submit">Refresh Images</button>
+    </form>
+    <br>
+
+    {% if folders %}
+        {% for folder, images in folders.items() %}
+            <h2>Folder: {{ folder }}</h2>
+            {% if images %}
+                <ul>
+                    {% for image in images %}
+                        <li>{{ image }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No images in this folder.</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>No folders with images found in the shared or local folders.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>

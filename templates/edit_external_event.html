@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event</title>
+</head>
+<body>
+    <h1>Edit Event</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" onsubmit="return processEventTimes()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ external_event.name }}" required>
+        <br><br>
+        <label for="linkname">Link Name:</label>
+        <input type="text" id="linkname" name="linkname" value="{{ external_event.name }}" required>
+        <br><br>
+
+        <label>Event Times (Select Hours):</label><br>
+        <div id="eventTimesContainer">
+            {% for hour in range(0, 24) %}
+                <label>
+                    <input type="checkbox" name="event_time" value="{{ hour }}" {% if hour|string in existing_event_times %}checked{% endif %}> {{ hour }}
+                </label>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="event_times" name="event_times">
+        <br><br>
+
+        <label>Category:</label>
+        <select id="category_id" name="category_id" required>
+            <option value="">Select a Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == external_event.category_id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="frames">Select Frames:</label><br>
+        {% for frame in frames %}
+            <label>
+                <input type="checkbox" name="frames" value="{{ frame.id }}" {% if frame.id in selected_frame_ids %}checked{% endif %}>
+                {{ frame.name }}
+            </label><br>
+        {% endfor %}
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('external_events') }}">Back to External Events</a>
+
+    <script>
+        function processEventTimes() {
+            const selectedHours = Array.from(document.querySelectorAll('input[name="event_time"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedHours.length < 1) {
+                alert("Please select at least one hour for event times.");
+                return false;
+            } else if (selectedHours.length > 10) {
+                alert("You can select a maximum of 10 different hours for event times.");
+                return false;
+            }
+
+            document.getElementById('event_times').value = selectedHours.join(',');
+            return true;
+        }
+    </script>
+</body>
+</html>

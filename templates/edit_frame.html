@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Photo Frame</title>
+</head>
+<body>
+    <h1>Edit Photo Frame</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" onsubmit="return processWakeUpTimes()">
+        <label for="id_code">ID (3 characters):</label>
+        <input type="text" id="id_code" name="id_code" maxlength="3" value="{{ photo_frame.id_code }}" required>
+        <br><br>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ photo_frame.name }}" required>
+        <br><br>
+
+        <label for="ip_address">IP Address:</label>
+        <input type="text" id="ip_address" name="ip_address" value="{{ photo_frame.ip_address }}" required>
+        <br><br>
+
+        <label>Wake-Up Times (Select Hours):</label><br>
+        <div id="wakeUpTimesContainer">
+            {% set selected_hours = photo_frame.wake_up_times.split(',') %}
+            {% for hour in range(0, 24) %}
+                <label>
+                    <input type="checkbox" name="wake_up_time" value="{{ hour }}" 
+                           {% if hour|string in selected_hours %}checked{% endif %}> {{ hour }}
+                </label>
+            {% endfor %}
+        </div>
+        <input type="hidden" id="wake_up_times" name="wake_up_times">
+        <br><br>
+
+        <label for="screen_type">Screen Type:</label>
+        <select id="screen_type" name="screen_type" required>
+            {% for screen in screen_types %}
+                <option value="{{ screen.name }}" {% if screen.name == photo_frame.screen_type %}selected{% endif %}>
+                    {{ screen.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+	<label for="category_id">Active Category:</label>
+	<select id="category_id" name="category_id" required>
+    	<option value="">Select a Category</option>
+    	{% for category in categories %}
+        <option value="{{ category.id }}" {% if category.id == photo_frame.category_id %}selected{% endif %}>{{ category.name }}</option>
+    	{% endfor %}
+	</select>
+	<br><br>
+
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="/">Back to Home</a>
+
+    <script>
+        function processWakeUpTimes() {
+            const selectedHours = Array.from(document.querySelectorAll('input[name="wake_up_time"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            // Validate the number of selected hours
+            if (selectedHours.length < 1) {
+                alert("Please select at least one hour for wake-up times.");
+                return false;
+            } else if (selectedHours.length > 10) {
+                alert("You can select a maximum of 10 different hours for wake-up times.");
+                return false;
+            }
+
+            // Set the value of the hidden input to the comma-separated string of selected hours
+            document.getElementById('wake_up_times').value = selectedHours.join(',');
+            return true;  // Allow form submission
+        }
+    </script>
+</body>
+</html>

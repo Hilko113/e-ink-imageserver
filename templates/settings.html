@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings - Screen Types</title>
+</head>
+<body>
+    <h1>Screen Type Settings</h1>
+
+    <h2>Existing Screen Types</h2>
+    {% if screen_types %}
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Script Filename</th>
+                <th>Orientation</th>  <!-- New column for orientation -->
+                <th>Actions</th>
+            </tr>
+            {% for screen in screen_types %}
+                <tr>
+                    <td>{{ screen.name }}</td>
+                    <td>{{ screen.script_filename }}</td>
+                    <td>{{ screen.orientation }}</td>  <!-- Display orientation -->
+                    <td>
+                        <form action="{{ url_for('delete_screen_type', name=screen.name) }}" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No screen types added yet.</p>
+    {% endif %}
+
+    <h2>Add a New Screen Type</h2>
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        <label for="script_filename">Script Filename:</label>
+        <input type="text" id="script_filename" name="script_filename" required>
+        <br><br>
+
+        <label for="orientation">Orientation:</label>
+        <select id="orientation" name="orientation" required>
+            <option value="horizontal">Horizontal</option>
+            <option value="vertical">Vertical</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Add Screen Type</button>
+    </form>
+
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
