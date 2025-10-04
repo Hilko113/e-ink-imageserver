@@ -1,4 +1,4 @@
-E-Ink Imageserver (beta)
+# E-Ink Imageserver (beta)
 A flexible, self-hosted Flask web application designed to manage and serve images to multiple E-Ink photo frames. This server allows for centralized control over what images are displayed, when frames update, and how images are processed for different types of e-paper displays.
 
 It's built to be the "brain" of a distributed digital art or photo frame system, perfect for home automation enthusiasts, digital artists, or anyone looking to create a dynamic, low-power display network.
@@ -20,31 +20,33 @@ Core Features
 
 ⚡ Efficient Caching: The image folder structure is cached to a JSON file for fast lookups, with a manual refresh option in the UI.
 
-How It Works
+# How It Works
 The server and frames operate in a coordinated, pull-based system:
 
-Configuration: You use the web UI to configure your Photo Frames (giving them an ID and IP), upload images, create Categories, and set up Events.
+-Configuration: You use the web UI to configure your Photo Frames (giving them an ID and IP), upload images, create Categories, and set up Events.
 
-Scheduled Processing: Every hour, a background task on the server checks for frames that have a scheduled wake-up time in the upcoming hour.
+-Scheduled Processing: Every hour, a background task on the server checks for frames that have a scheduled wake-up time in the upcoming hour.
 
-Image Selection & Processing: For each due frame, the server:
+-Image Selection & Processing: For each due frame, the server:
 
-Identifies the frame's assigned Category.
+-Identifies the frame's assigned Category.
 
-Picks a random, orientation-appropriate image from the folders linked to that category.
+-Picks a random, orientation-appropriate image from the folders linked to that category.
 
-Executes the Python script associated with the frame's Screen Type (e.g., 6color73i.py), passing it the chosen image.
+-Executes the Python script associated with the frame's Screen Type (e.g., 6color73i.py), passing it the chosen image.
 
-The script processes the image (resizes, dithers) and saves the output as a device-ready file (e.g., a .h C-header file named static/frameABC.h).
+-The script processes the image (resizes, dithers) and saves the output as a device-ready file (e.g., a .h C-header file named static/frameABC.h).
 
-Frame Wake-Up & Fetch: The physical E-Ink frame (e.g., an ESP32 device) wakes up at its scheduled time. It connects to the network and makes two requests to the server:
+-Frame Wake-Up & Fetch: The physical E-Ink frame (e.g., an ESP32 device) wakes up at its scheduled time. It connects to the network and makes two requests to the server:
 
-It downloads its updated wake-up schedule from a unique URL (e.g., http://server-ip/static/frameABC.txt).
+-It downloads its updated wake-up schedule from a unique URL (e.g., http://server-ip/static/frameABC.txt).
 
-It downloads the pre-processed image data from its unique URL (e.g., http://server-ip/static/frameABC.h).
+-It downloads the pre-processed image data from its unique URL (e.g., http://server-ip/static/frameABC.h).
 
-Display & Sleep: The frame displays the new image and goes back to deep sleep until the next scheduled wake-up time.
+-Display & Sleep: The frame displays the new image and goes back to deep sleep until the next scheduled wake-up time.
 
+
+# INSTALLATION:
 
 Install DietPi
 
@@ -124,7 +126,7 @@ sudo nano /etc/fstab
 ```
 
 
-6. First Run
+# First Run
 Run the application directly with Flask for the first time. This will create the imageserver.db SQLite database file with the necessary tables.
 
 Bash
@@ -133,12 +135,13 @@ Bash
 python app.py
 Once you see it running, you can stop it with Ctrl+C. The database is now initialized.
 
-7. Deployment for Production (using Gunicorn)
+
+
+Deployment for Production (using Gunicorn)
 Using the built-in Flask server is not suitable for production. Gunicorn is a robust WSGI server that can run the application reliably. The included imageserver.wsgi file is the entry point for Gunicorn.
 
 To run the server with Gunicorn:
 
-Bash
 
 # Navigate to the parent directory of your app
 cd /home/dietpi/imageserver
